@@ -16,7 +16,12 @@ namespace IdentityManager.Controller
             _userManager = userManager; 
             _signInManager = signInManager;
         }
-
+        [HttpGet]
+        public async Task<IActionResult> GetAllAccounts(IdentityUser user)
+        {
+            var getAccount = await _userManager.GetRolesAsync(user);
+            return Ok(user);
+        }
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -28,7 +33,7 @@ namespace IdentityManager.Controller
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Ok();
+                    return Content("Added");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -36,7 +41,7 @@ namespace IdentityManager.Controller
                 }
 
             }
-            return Ok(); 
+            return Ok(model); 
         }
 
     }
